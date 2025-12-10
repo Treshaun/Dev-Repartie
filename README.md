@@ -183,21 +183,21 @@ mvn -DskipTests clean install
 
 ```powershell
 Set-Location server
-mvn exec:java -Dexec.mainClass="com.auction.server.AuctionServer"
+mvn exec:java '-Dexec.mainClass=com.auction.server.AuctionServer'
 ```
 
 **Étape 2 - Démarrer le Client Admin (nouveau terminal) :**
 
 ```powershell
 Set-Location ..\client-admin
-mvn exec:java -Dexec.mainClass="com.auction.admin.AdminClientApp"
+mvn exec:java '-Dexec.mainClass=com.auction.admin.AdminClientApp'
 ```
 
 **Étape 3 - Démarrer les Clients Acheteurs (plusieurs terminaux) :**
 
 ```powershell
 Set-Location ..\client-buyer
-mvn exec:java -Dexec.mainClass="com.auction.client.BuyerClientApp"
+mvn exec:java '-Dexec.mainClass=com.auction.client.BuyerClientApp'
 ```
 
 ---
