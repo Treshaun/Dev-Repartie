@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -49,6 +51,7 @@ public class AdminClientApp extends Application {
     private TextArea logArea;
     private VBox controlsBox;
     private Timeline clientsRefreshTimeline;
+    private boolean clientScrollBarHooked = false;
 
     private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 'TND'");
 
@@ -434,6 +437,40 @@ public class AdminClientApp extends Application {
                 clientsListView.getSelectionModel().select(target);
                 clientsListView.scrollTo(target);
                 event.consume();
+            }
+        });
+
+        // Snap scrollbar movement to whole items (arrow clicks or drag)
+        clientsListView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            if (newSkin != null) {
+                hookClientScrollBar();
+            }
+        });
+        // Try binding after initial layout as well
+        Platform.runLater(this::hookClientScrollBar);
+    }
+
+    /**
+     * Attach a listener to the vertical scrollbar to snap to item boundaries.
+     */
+    private void hookClientScrollBar() {
+        if (clientScrollBarHooked) return;
+        clientsListView.lookupAll(".scroll-bar").forEach(node -> {
+            if (node instanceof ScrollBar sb && sb.getOrientation() == Orientation.VERTICAL) {
+                final boolean[] adjusting = {false};
+                sb.valueProperty().addListener((obs, oldVal, newVal) -> {
+                    if (adjusting[0]) return;
+                    int size = clientsListView.getItems().size();
+                    if (size <= 1) return;
+                    int target = (int) Math.round(newVal.doubleValue() * (size - 1));
+                    target = Math.max(0, Math.min(size - 1, target));
+                    adjusting[0] = true;
+                    clientsListView.getSelectionModel().select(target);
+                    clientsListView.scrollTo(target);
+                    sb.setValue(size == 1 ? 0 : (double) target / (double) (size - 1));
+                    adjusting[0] = false;
+                });
+                clientScrollBarHooked = true;
             }
         });
     }
