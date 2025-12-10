@@ -40,6 +40,9 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.auction.admin.AdminClientApp</mainClass>
+                    <jvmArgs>
+                        <jvmArg>--enable-native-access=javafx.graphics</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
             <plugin>
