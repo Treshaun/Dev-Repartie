@@ -151,7 +151,7 @@ public class ClientHandler implements Runnable {
         boolean success = auctionManager.placeBid(bid);
         
         if (success) {
-            Message response = new Message(MessageType.BID_RESPONSE, "Enchère acceptée: " + bid.getAmount() + "€");
+            Message response = new Message(MessageType.BID_RESPONSE, "Enchère acceptée: " + bid.getAmount() + " TND");
             response.setData(true);
             sendMessage(response);
         } else {

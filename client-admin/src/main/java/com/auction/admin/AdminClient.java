@@ -159,7 +159,7 @@ public class AdminClient {
         System.out.print("Description: ");
         String description = scanner.nextLine().trim();
         
-        System.out.print("Prix de départ (€): ");
+        System.out.print("Prix de départ (TND): ");
         double price;
         try {
             price = Double.parseDouble(scanner.nextLine().trim());
@@ -174,7 +174,7 @@ public class AdminClient {
         if (success) {
             System.out.println("\n✓ Enchère démarrée avec succès!");
             System.out.println("  Produit: " + name);
-            System.out.println("  Prix de départ: " + price + "€");
+            System.out.println("  Prix de départ: " + price + " TND");
         } else {
             System.out.println("\n✗ Impossible de démarrer l'enchère.");
             System.out.println("  Une enchère est peut-être déjà en cours.");
@@ -200,7 +200,7 @@ public class AdminClient {
         if (result != null) {
             System.out.println("\n✓ Enchère clôturée!");
             System.out.println("  Produit: " + result.getName());
-            System.out.println("  Prix final: " + result.getCurrentPrice() + "€");
+            System.out.println("  Prix final: " + result.getCurrentPrice() + " TND");
             
             if (result.getHighestBidderName() != null) {
                 System.out.println("  Gagnant: " + result.getHighestBidderName());
@@ -248,7 +248,7 @@ public class AdminClient {
             System.out.println("│ ENCHÈRE EN COURS                   │");
             System.out.println("├────────────────────────────────────┤");
             System.out.println("│ Produit: " + padRight(current.getName(), 26) + "│");
-            System.out.println("│ Prix actuel: " + padRight(current.getCurrentPrice() + "€", 22) + "│");
+            System.out.println("│ Prix actuel: " + padRight(current.getCurrentPrice() + " TND", 22) + "│");
             String bidder = current.getHighestBidderName() != null ? current.getHighestBidderName() : "-";
             System.out.println("│ Meilleur enchérisseur: " + padRight(bidder, 12) + "│");
             System.out.println("└────────────────────────────────────┘");
@@ -332,7 +332,7 @@ public class AdminClient {
                 System.out.printf("%-5d %-20s %-15s %-15s%n", 
                     (i + 1), 
                     truncate(p.getName(), 20), 
-                    p.getCurrentPrice() + "€",
+                    p.getCurrentPrice() + " TND",
                     truncate(winner, 15));
             }
             

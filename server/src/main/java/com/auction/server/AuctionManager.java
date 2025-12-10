@@ -59,7 +59,7 @@ public class AuctionManager {
             currentProduct = new Product(productId, productName, description, startingPrice);
             currentProduct.setActive(true);
             
-            System.out.println("[AUCTION] Nouvelle enchère démarrée: " + productName + " - " + startingPrice + "€");
+            System.out.println("[AUCTION] Nouvelle enchère démarrée: " + productName + " - " + startingPrice + " TND");
             
             // Diffuser via Multicast
             AuctionUpdate update = AuctionUpdate.newAuction(productId, productName, description, startingPrice);
@@ -91,7 +91,7 @@ public class AuctionManager {
             
             if (bid.getAmount() <= currentProduct.getCurrentPrice()) {
                 System.out.println("[AUCTION] Enchère refusée: montant insuffisant (" + 
-                    bid.getAmount() + "€ <= " + currentProduct.getCurrentPrice() + "€)");
+                    bid.getAmount() + " TND <= " + currentProduct.getCurrentPrice() + " TND)");
                 return false;
             }
             
@@ -100,7 +100,7 @@ public class AuctionManager {
             currentProduct.setHighestBidderId(bid.getClientId());
             currentProduct.setHighestBidderName(bid.getClientName());
             
-            System.out.println("[AUCTION] Enchère acceptée: " + bid.getAmount() + "€ par " + bid.getClientName());
+            System.out.println("[AUCTION] Enchère acceptée: " + bid.getAmount() + " TND par " + bid.getClientName());
             
             // Diffuser la mise à jour via Multicast
             AuctionUpdate update = AuctionUpdate.newBid(
@@ -114,7 +114,7 @@ public class AuctionManager {
             
             // Notifier tous les clients connectés via TCP
             Message notification = new Message(MessageType.AUCTION_UPDATE, 
-                "Nouvelle enchère: " + bid.getAmount() + "€ par " + bid.getClientName(), update);
+                "Nouvelle enchère: " + bid.getAmount() + " TND par " + bid.getClientName(), update);
             broadcastToClients(notification);
             
             return true;
@@ -145,7 +145,7 @@ public class AuctionManager {
             if (currentProduct.getHighestBidderId() != null) {
                 System.out.println("[AUCTION] Enchère terminée: " + currentProduct.getName() + 
                     " vendu à " + currentProduct.getHighestBidderName() + 
-                    " pour " + currentProduct.getCurrentPrice() + "€");
+                    " pour " + currentProduct.getCurrentPrice() + " TND");
                 
                 AuctionUpdate update = AuctionUpdate.auctionClosed(
                     currentProduct.getId(),

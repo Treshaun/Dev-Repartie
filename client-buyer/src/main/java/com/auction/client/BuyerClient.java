@@ -46,7 +46,7 @@ public class BuyerClient extends JFrame {
     
     // État de l'enchère
     private Product currentProduct;
-    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 €");
+    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 'TND'");
     
     public BuyerClient() {
         initializeUI();
@@ -107,7 +107,7 @@ public class BuyerClient extends JFrame {
         
         // Panel d'enchère
         JPanel bidPanel = new JPanel(new FlowLayout());
-        bidPanel.add(new JLabel("Votre enchère (€):"));
+        bidPanel.add(new JLabel("Votre enchère (TND):"));
         bidField = new JTextField(10);
         bidField.addActionListener(e -> placeBid());
         bidPanel.add(bidField);
@@ -392,7 +392,7 @@ public class BuyerClient extends JFrame {
         
         try {
             BidRequest bid = new BidRequest(clientId, clientName, null, amount);
-            Message bidMessage = new Message(MessageType.BID_REQUEST, "Enchère: " + amount + "€", bid);
+            Message bidMessage = new Message(MessageType.BID_REQUEST, "Enchère: " + amount + " TND", bid);
             output.writeObject(bidMessage);
             output.flush();
             output.reset();

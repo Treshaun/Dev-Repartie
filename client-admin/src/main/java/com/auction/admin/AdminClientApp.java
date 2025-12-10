@@ -45,7 +45,7 @@ public class AdminClientApp extends Application {
     private TextArea logArea;
     private VBox controlsBox;
 
-    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 €");
+    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 'TND'");
 
     @Override
     public void start(Stage primaryStage) {
@@ -136,7 +136,7 @@ public class AdminClientApp extends Application {
         currentAuctionLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
         currentAuctionLabel.setTextFill(Color.web("#80cbc4"));
 
-        currentPriceLabel = new Label("Prix: ---.-- €");
+        currentPriceLabel = new Label("Prix: ---.-- TND");
         currentPriceLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
         currentPriceLabel.setTextFill(Color.web("#a5d6a7"));
 
@@ -360,7 +360,7 @@ public class AdminClientApp extends Application {
             connectButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;");
             controlsBox.setDisable(true);
             currentAuctionLabel.setText("Aucune enchère");
-            currentPriceLabel.setText("Prix: ---.-- €");
+            currentPriceLabel.setText("Prix: ---.-- TND");
             currentBidderLabel.setText("Enchérisseur: -");
         }
     }
@@ -381,7 +381,7 @@ public class AdminClientApp extends Application {
                 currentBidderLabel.setText("Enchérisseur: " + bidder);
             } else {
                 currentAuctionLabel.setText("Aucune enchère en cours");
-                currentPriceLabel.setText("Prix: ---.-- €");
+                currentPriceLabel.setText("Prix: ---.-- TND");
                 currentBidderLabel.setText("Enchérisseur: -");
             }
             
@@ -442,7 +442,7 @@ public class AdminClientApp extends Application {
         descField.setPromptText("Description");
         
         TextField priceField = new TextField();
-        priceField.setPromptText("Prix de départ (€)");
+        priceField.setPromptText("Prix de départ (TND)");
 
         grid.add(new Label("Produit:"), 0, 0);
         grid.add(nameField, 1, 0);

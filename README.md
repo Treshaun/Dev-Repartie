@@ -241,28 +241,28 @@ mvn exec:java '-Dexec.mainClass=com.auction.client.BuyerClientApp'
 │     └─► Rejoignent automatiquement le groupe Multicast          │
 │                                                                 │
 │  3. MISE EN VENTE (Admin via RMI)                               │
-│     └─► Menu 1: Démarrer "PC Portable", 500€                    │
+│     └─► Menu 1: Démarrer "PC Portable", 500 TND                 │
 │                                                                 │
 │  4. DIFFUSION                                                   │
-│     └─► Multicast: "PC Portable - Prix: 500€"                   │
+│     └─► Multicast: "PC Portable - Prix: 500 TND"                │
 │     └─► Tous les clients voient l'enchère                       │
 │                                                                 │
 │  5. ENCHÈRE                                                     │
-│     └─► Client A clique "Enchérir" avec 550€                    │
+│     └─► Client A clique "Enchérir" avec 550 TND                 │
 │     └─► Message TCP envoyé au serveur                           │
 │                                                                 │
 │  6. VALIDATION (synchronized)                                   │
-│     └─► Serveur vérifie: 550€ > 500€ ✓                          │
+│     └─► Serveur vérifie: 550 TND > 500 TND ✓                    │
 │     └─► Met à jour le prix courant                              │
 │     └─► Diffuse via Multicast                                   │
 │                                                                 │
 │  7. MISE À JOUR                                                 │
 │     └─► Client B reçoit via Multicast                           │
-│     └─► Son interface affiche: "550€ par ClientA"               │
+│     └─► Son interface affiche: "550 TND par ClientA"            │
 │                                                                 │
 │  8. CLÔTURE (Admin via RMI)                                     │
 │     └─► Menu 2: Clôturer l'enchère                              │
-│     └─► Multicast: "VENDU à ClientA pour 550€!"                 │
+│     └─► Multicast: "VENDU à ClientA pour 550 TND!"              │
 │                                                                 │
 └────────────────────────────────────────────────────────────────┘
 ```

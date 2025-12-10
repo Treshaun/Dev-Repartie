@@ -50,7 +50,7 @@ public class BuyerClientApp extends Application {
     private TextArea historyArea;
     private VBox auctionInfoBox;
 
-    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 €");
+    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00 'TND'");
 
     @Override
     public void start(Stage primaryStage) {
@@ -138,7 +138,7 @@ public class BuyerClientApp extends Application {
         descriptionLabel.setTextFill(Color.web("#607d8b"));
         descriptionLabel.setFont(Font.font("System", FontWeight.NORMAL, 13));
 
-        priceLabel = new Label("---.-- €");
+        priceLabel = new Label("---.-- TND");
         priceLabel.setFont(Font.font("System", FontWeight.BOLD, 42));
         priceLabel.setTextFill(Color.web("#2e7d32"));
 
@@ -158,7 +158,7 @@ public class BuyerClientApp extends Application {
         bidLabel.setFont(Font.font("System", FontWeight.BOLD, 13));
 
         bidField = new TextField();
-        bidField.setPromptText("Montant (€)");
+        bidField.setPromptText("Montant (TND)");
         bidField.setPrefWidth(150);
         bidField.setStyle("-fx-background-radius: 5; -fx-font-size: 14px;");
         bidField.setOnAction(e -> placeBid());
@@ -436,7 +436,7 @@ public class BuyerClientApp extends Application {
         } else {
             // Enchère annulée ou sans gagnant
             productLabel.setText("En attente d'une enchère...");
-            priceLabel.setText("---.-- €");
+            priceLabel.setText("---.-- TND");
             highestBidderLabel.setText("Meilleur enchérisseur: -");
             highestBidderLabel.setTextFill(Color.web("#455a64"));
             auctionInfoBox.setStyle("-fx-background-color: linear-gradient(to bottom, #e8f5e9, #c8e6c9); -fx-background-radius: 10;");
@@ -464,7 +464,7 @@ public class BuyerClientApp extends Application {
 
         try {
             BidRequest bid = new BidRequest(clientId, clientName, null, amount);
-            Message bidMessage = new Message(MessageType.BID_REQUEST, "Enchère: " + amount + "€", bid);
+            Message bidMessage = new Message(MessageType.BID_REQUEST, "Enchère: " + amount + " TND", bid);
             output.writeObject(bidMessage);
             output.flush();
             output.reset();
@@ -497,7 +497,7 @@ public class BuyerClientApp extends Application {
             nameField.setDisable(false);
             bidButton.setDisable(true);
             productLabel.setText("En attente d'une enchère...");
-            priceLabel.setText("---.-- €");
+            priceLabel.setText("---.-- TND");
             highestBidderLabel.setText("Meilleur enchérisseur: -");
             auctionInfoBox.setStyle("-fx-background-color: linear-gradient(to bottom, #e8f5e9, #c8e6c9); -fx-background-radius: 10;");
         }

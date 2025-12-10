@@ -48,7 +48,7 @@ public class AuctionUpdate implements Serializable {
         AuctionUpdate update = new AuctionUpdate(UpdateType.NEW_AUCTION, productId, productName, startingPrice);
         update.setProductDescription(description);
         update.setStartingPrice(startingPrice);
-        update.setMessage("Nouvelle vente: " + productName + " - Prix de départ: " + startingPrice + "€");
+        update.setMessage("Nouvelle vente: " + productName + " - Prix de départ: " + startingPrice + " TND");
         return update;
     }
     
@@ -56,7 +56,7 @@ public class AuctionUpdate implements Serializable {
         AuctionUpdate update = new AuctionUpdate(UpdateType.NEW_BID, productId, productName, newPrice);
         update.setHighestBidder(bidderId);
         update.setHighestBidderName(bidderName);
-        update.setMessage("Nouvelle enchère: " + newPrice + "€ par " + bidderName);
+        update.setMessage("Nouvelle enchère: " + newPrice + " TND par " + bidderName);
         return update;
     }
     
@@ -65,7 +65,7 @@ public class AuctionUpdate implements Serializable {
         update.setWinnerId(winnerId);
         update.setWinnerName(winnerName);
         update.setWinningPrice(finalPrice);
-        update.setMessage("VENDU! " + productName + " à " + winnerName + " pour " + finalPrice + "€");
+        update.setMessage("VENDU! " + productName + " à " + winnerName + " pour " + finalPrice + " TND");
         return update;
     }
     
