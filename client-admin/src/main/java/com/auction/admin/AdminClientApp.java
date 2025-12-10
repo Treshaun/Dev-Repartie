@@ -206,6 +206,7 @@ public class AdminClientApp extends Application {
         clientsListView = new ListView<>();
         clientsListView.setStyle("-fx-background-color: #546e7a; -fx-control-inner-background: #546e7a;");
         clientsListView.setPrefHeight(150);
+        clientsListView.setPlaceholder(new Label("Aucun client connecté"));
         VBox.setVgrow(clientsListView, Priority.ALWAYS);
 
         HBox buttonsBox = new HBox(10);
