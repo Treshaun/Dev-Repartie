@@ -456,21 +456,24 @@ public class AdminClientApp extends Application {
     private void hookClientScrollBar() {
         if (clientScrollBarHooked) return;
         clientsListView.lookupAll(".scroll-bar").forEach(node -> {
-            if (node instanceof ScrollBar sb && sb.getOrientation() == Orientation.VERTICAL) {
-                final boolean[] adjusting = {false};
-                sb.valueProperty().addListener((obs, oldVal, newVal) -> {
-                    if (adjusting[0]) return;
-                    int size = clientsListView.getItems().size();
-                    if (size <= 1) return;
-                    int target = (int) Math.round(newVal.doubleValue() * (size - 1));
-                    target = Math.max(0, Math.min(size - 1, target));
-                    adjusting[0] = true;
-                    clientsListView.getSelectionModel().select(target);
-                    clientsListView.scrollTo(target);
-                    sb.setValue(size == 1 ? 0 : (double) target / (double) (size - 1));
-                    adjusting[0] = false;
-                });
-                clientScrollBarHooked = true;
+            if (node instanceof ScrollBar) {
+                ScrollBar sb = (ScrollBar) node;
+                if (sb.getOrientation() == Orientation.VERTICAL) {
+                    final boolean[] adjusting = {false};
+                    sb.valueProperty().addListener((obs, oldVal, newVal) -> {
+                        if (adjusting[0]) return;
+                        int size = clientsListView.getItems().size();
+                        if (size <= 1) return;
+                        int target = (int) Math.round(newVal.doubleValue() * (size - 1));
+                        target = Math.max(0, Math.min(size - 1, target));
+                        adjusting[0] = true;
+                        clientsListView.getSelectionModel().select(target);
+                        clientsListView.scrollTo(target);
+                        sb.setValue(size == 1 ? 0 : (double) target / (double) (size - 1));
+                        adjusting[0] = false;
+                    });
+                    clientScrollBarHooked = true;
+                }
             }
         });
     }
