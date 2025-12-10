@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -207,6 +208,7 @@ public class AdminClientApp extends Application {
         clientsListView.setStyle("-fx-background-color: #546e7a; -fx-control-inner-background: #546e7a;");
         clientsListView.setPrefHeight(150);
         clientsListView.setPlaceholder(new Label("Aucun client connecté"));
+        configureClientListScrollJump();
         VBox.setVgrow(clientsListView, Priority.ALWAYS);
 
         HBox buttonsBox = new HBox(10);
@@ -411,6 +413,29 @@ public class AdminClientApp extends Application {
         } catch (Exception e) {
             addLog("❌ Erreur: " + e.getMessage());
         }
+    }
+
+    /**
+     * Configure le défilement de la liste pour passer directement d'un client au suivant/précédent.
+     */
+    private void configureClientListScrollJump() {
+        clientsListView.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (clientsListView.getItems().isEmpty()) {
+                return;
+            }
+            int size = clientsListView.getItems().size();
+            int current = clientsListView.getSelectionModel().getSelectedIndex();
+            if (current < 0) {
+                current = 0;
+            }
+            int delta = event.getDeltaY() < 0 ? 1 : -1;
+            int target = Math.max(0, Math.min(size - 1, current + delta));
+            if (target != current) {
+                clientsListView.getSelectionModel().select(target);
+                clientsListView.scrollTo(target);
+                event.consume();
+            }
+        });
     }
 
     /**
