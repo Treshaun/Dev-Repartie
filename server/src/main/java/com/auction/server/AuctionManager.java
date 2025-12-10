@@ -244,8 +244,7 @@ public class AuctionManager {
         // Notifier le client s'il est connecté
         ClientHandler handler = connectedClients.get(clientId);
         if (handler != null) {
-            Message notification = new Message(MessageType.ERROR, "Vous avez été banni par l'administrateur");
-            handler.sendMessage(notification);
+            handler.forceDisconnect("Vous avez été banni par l'administrateur");
         }
         
         System.out.println("[AUCTION] Client banni: " + clientId);

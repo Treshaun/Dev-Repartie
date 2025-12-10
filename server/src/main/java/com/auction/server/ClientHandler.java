@@ -215,4 +215,14 @@ public class ClientHandler implements Runnable {
     public boolean isConnected() {
         return connected && !socket.isClosed();
     }
+
+    /**
+     * Déconnecte le client suite à une action d'admin (bannissement, etc.).
+     */
+    public void forceDisconnect(String reason) {
+        if (reason != null && !reason.isEmpty()) {
+            sendError(reason);
+        }
+        disconnect();
+    }
 }
