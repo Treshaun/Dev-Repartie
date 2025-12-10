@@ -227,6 +227,7 @@ public class BuyerClientApp extends Application {
             output = new ObjectOutputStream(socket.getOutputStream());
             output.flush();
             input = new ObjectInputStream(socket.getInputStream());
+            connected = true;
 
             // Envoyer la demande de connexion
             Message loginRequest = new Message(MessageType.LOGIN_REQUEST, name);

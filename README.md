@@ -168,39 +168,37 @@ e-auction/
 
 ### Compilation
 
-```bash
+```powershell
 # Cloner le dépôt
-git clone https://github.com/youssef7511/Dev-Repartie.git
-cd Dev-Repartie
+git clone https://github.com/Treshaun/Dev-Repartie.git
+Set-Location Dev-Repartie
 
 # Compiler tous les modules
-mvn clean install -DskipTests
+mvn -DskipTests clean install
 ```
 
 ### Exécution
 
 **Étape 1 - Démarrer le Serveur :**
 
-```bash
-cd server
+```powershell
+Set-Location server
 mvn exec:java -Dexec.mainClass="com.auction.server.AuctionServer"
 ```
 
 **Étape 2 - Démarrer le Client Admin (nouveau terminal) :**
 
-```bash
-cd client-admin
+```powershell
+Set-Location ..\client-admin
 mvn exec:java -Dexec.mainClass="com.auction.admin.AdminClientApp"
 ```
 
 **Étape 3 - Démarrer les Clients Acheteurs (plusieurs terminaux) :**
 
-```bash
-cd client-buyer
+```powershell
+Set-Location ..\client-buyer
 mvn exec:java -Dexec.mainClass="com.auction.client.BuyerClientApp"
 ```
-
-> **Note Windows :** Utilisez `"` autour des arguments `-Dexec.mainClass`
 
 ---
 

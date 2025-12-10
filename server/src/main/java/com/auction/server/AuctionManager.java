@@ -45,29 +45,34 @@ public class AuctionManager {
      * @param startingPrice Prix de départ
      * @return true si l'enchère a été démarrée
      */
-    public synchronized boolean startAuction(String productName, String description, double startingPrice) {
-        // Vérifier qu'aucune enchère n'est en cours
-        if (currentProduct != null && currentProduct.isActive()) {
-            System.out.println("[AUCTION] Une enchère est déjà en cours");
-            return false;
+    public boolean startAuction(String productName, String description, double startingPrice) {
+        bidLock.lock();
+        try {
+            // Vérifier qu'aucune enchère n'est en cours
+            if (currentProduct != null && currentProduct.isActive()) {
+                System.out.println("[AUCTION] Une enchère est déjà en cours");
+                return false;
+            }
+            
+            // Créer le nouveau produit
+            String productId = UUID.randomUUID().toString().substring(0, 8);
+            currentProduct = new Product(productId, productName, description, startingPrice);
+            currentProduct.setActive(true);
+            
+            System.out.println("[AUCTION] Nouvelle enchère démarrée: " + productName + " - " + startingPrice + "€");
+            
+            // Diffuser via Multicast
+            AuctionUpdate update = AuctionUpdate.newAuction(productId, productName, description, startingPrice);
+            broadcaster.broadcast(update);
+            
+            // Notifier tous les clients connectés via TCP
+            Message notification = new Message(MessageType.AUCTION_START, "Nouvelle enchère: " + productName, update);
+            broadcastToClients(notification);
+            
+            return true;
+        } finally {
+            bidLock.unlock();
         }
-        
-        // Créer le nouveau produit
-        String productId = UUID.randomUUID().toString().substring(0, 8);
-        currentProduct = new Product(productId, productName, description, startingPrice);
-        currentProduct.setActive(true);
-        
-        System.out.println("[AUCTION] Nouvelle enchère démarrée: " + productName + " - " + startingPrice + "€");
-        
-        // Diffuser via Multicast
-        AuctionUpdate update = AuctionUpdate.newAuction(productId, productName, description, startingPrice);
-        broadcaster.broadcast(update);
-        
-        // Notifier tous les clients connectés via TCP
-        Message notification = new Message(MessageType.AUCTION_START, "Nouvelle enchère: " + productName, update);
-        broadcastToClients(notification);
-        
-        return true;
     }
     
     /**
@@ -123,83 +128,93 @@ public class AuctionManager {
      * Clôture l'enchère en cours
      * @return Le produit vendu
      */
-    public synchronized Product stopAuction() {
-        if (currentProduct == null || !currentProduct.isActive()) {
-            System.out.println("[AUCTION] Pas d'enchère à clôturer");
-            return null;
+    public Product stopAuction() {
+        bidLock.lock();
+        try {
+            if (currentProduct == null || !currentProduct.isActive()) {
+                System.out.println("[AUCTION] Pas d'enchère à clôturer");
+                return null;
+            }
+            
+            currentProduct.setActive(false);
+            
+            // Préparer le résultat
+            Product soldProduct = currentProduct;
+            
+            // Diffuser la fin de l'enchère
+            if (currentProduct.getHighestBidderId() != null) {
+                System.out.println("[AUCTION] Enchère terminée: " + currentProduct.getName() + 
+                    " vendu à " + currentProduct.getHighestBidderName() + 
+                    " pour " + currentProduct.getCurrentPrice() + "€");
+                
+                AuctionUpdate update = AuctionUpdate.auctionClosed(
+                    currentProduct.getId(),
+                    currentProduct.getName(),
+                    currentProduct.getHighestBidderId(),
+                    currentProduct.getHighestBidderName(),
+                    currentProduct.getCurrentPrice()
+                );
+                broadcaster.broadcast(update);
+                
+                Message notification = new Message(MessageType.AUCTION_END, 
+                    "VENDU! " + currentProduct.getName() + " à " + currentProduct.getHighestBidderName(), update);
+                broadcastToClients(notification);
+                
+            } else {
+                System.out.println("[AUCTION] Enchère terminée sans enchérisseur");
+                
+                AuctionUpdate update = new AuctionUpdate();
+                update.setUpdateType(AuctionUpdate.UpdateType.AUCTION_CLOSED);
+                update.setProductId(currentProduct.getId());
+                update.setProductName(currentProduct.getName());
+                update.setMessage("Enchère terminée sans vente");
+                broadcaster.broadcast(update);
+                
+                Message notification = new Message(MessageType.AUCTION_END, 
+                    "Enchère terminée sans vente", update);
+                broadcastToClients(notification);
+            }
+            
+            // Ajouter à l'historique
+            salesHistory.add(soldProduct);
+            
+            // Réinitialiser le produit courant
+            currentProduct = null;
+            
+            return soldProduct;
+        } finally {
+            bidLock.unlock();
         }
-        
-        currentProduct.setActive(false);
-        
-        // Préparer le résultat
-        Product soldProduct = currentProduct;
-        
-        // Diffuser la fin de l'enchère
-        if (currentProduct.getHighestBidderId() != null) {
-            System.out.println("[AUCTION] Enchère terminée: " + currentProduct.getName() + 
-                " vendu à " + currentProduct.getHighestBidderName() + 
-                " pour " + currentProduct.getCurrentPrice() + "€");
-            
-            AuctionUpdate update = AuctionUpdate.auctionClosed(
-                currentProduct.getId(),
-                currentProduct.getName(),
-                currentProduct.getHighestBidderId(),
-                currentProduct.getHighestBidderName(),
-                currentProduct.getCurrentPrice()
-            );
-            broadcaster.broadcast(update);
-            
-            Message notification = new Message(MessageType.AUCTION_END, 
-                "VENDU! " + currentProduct.getName() + " à " + currentProduct.getHighestBidderName(), update);
-            broadcastToClients(notification);
-            
-        } else {
-            System.out.println("[AUCTION] Enchère terminée sans enchérisseur");
-            
-            AuctionUpdate update = new AuctionUpdate();
-            update.setUpdateType(AuctionUpdate.UpdateType.AUCTION_CLOSED);
-            update.setProductId(currentProduct.getId());
-            update.setProductName(currentProduct.getName());
-            update.setMessage("Enchère terminée sans vente");
-            broadcaster.broadcast(update);
-            
-            Message notification = new Message(MessageType.AUCTION_END, 
-                "Enchère terminée sans vente", update);
-            broadcastToClients(notification);
-        }
-        
-        // Ajouter à l'historique
-        salesHistory.add(soldProduct);
-        
-        // Réinitialiser le produit courant
-        currentProduct = null;
-        
-        return soldProduct;
     }
     
     /**
      * Annule l'enchère en cours
      * @return true si l'enchère a été annulée
      */
-    public synchronized boolean cancelAuction() {
-        if (currentProduct == null || !currentProduct.isActive()) {
-            return false;
+    public boolean cancelAuction() {
+        bidLock.lock();
+        try {
+            if (currentProduct == null || !currentProduct.isActive()) {
+                return false;
+            }
+            
+            System.out.println("[AUCTION] Enchère annulée: " + currentProduct.getName());
+            
+            AuctionUpdate update = new AuctionUpdate();
+            update.setUpdateType(AuctionUpdate.UpdateType.AUCTION_CANCELLED);
+            update.setProductId(currentProduct.getId());
+            update.setProductName(currentProduct.getName());
+            update.setMessage("Enchère annulée par l'administrateur");
+            broadcaster.broadcast(update);
+            
+            Message notification = new Message(MessageType.AUCTION_END, "Enchère annulée", update);
+            broadcastToClients(notification);
+            
+            currentProduct = null;
+            return true;
+        } finally {
+            bidLock.unlock();
         }
-        
-        System.out.println("[AUCTION] Enchère annulée: " + currentProduct.getName());
-        
-        AuctionUpdate update = new AuctionUpdate();
-        update.setUpdateType(AuctionUpdate.UpdateType.AUCTION_CANCELLED);
-        update.setProductId(currentProduct.getId());
-        update.setProductName(currentProduct.getName());
-        update.setMessage("Enchère annulée par l'administrateur");
-        broadcaster.broadcast(update);
-        
-        Message notification = new Message(MessageType.AUCTION_END, "Enchère annulée", update);
-        broadcastToClients(notification);
-        
-        currentProduct = null;
-        return true;
     }
     
     /**
