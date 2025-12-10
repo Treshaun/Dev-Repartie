@@ -1,13 +1,9 @@
 # 🏛️ La Salle des Ventes Distribuée (e-Auction)
 
 > **Module :** Développement d'Applications Réparties / Systèmes Distribués  
-> **Type :** Examen Pratique / Projet de Fin de Semestre  
-> **Auteur :** Youssef  
-> **Date :** Décembre 2025
-
-[![Java](https://img.shields.io/badge/Java-11%2B-orange)](https://www.oracle.com/java/)
-[![Maven](https://img.shields.io/badge/Maven-3.6%2B-blue)](https://maven.apache.org/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-17.0.2-green)](https://openjfx.io/)
+> [![Java](https://img.shields.io/badge/Java-11%2B-orange)](https://www.oracle.com/java/)
+> [![Maven](https://img.shields.io/badge/Maven-3.6%2B-blue)](https://maven.apache.org/)
+> [![JavaFX](https://img.shields.io/badge/JavaFX-17.0.2-green)](https://openjfx.io/)
 
 ---
 
@@ -63,12 +59,12 @@ Système d'enchères électroniques en temps réel. Acheteurs multiples via TCP 
 
 ### Composants
 
-| Composant        | Description                                  | Technologies                  |
-| ---------------- | -------------------------------------------- | ----------------------------- |
-| **Server**       | Serveur central d'enchères                   | TCP + Multicast + RMI         |
-| **Client Buyer** | Clients acheteurs (JavaFX UI et console)     | TCP + Multicast Listener      |
-| **Client Admin** | Clients admin (JavaFX UI et console legacy)  | RMI                           |
-| **Common**       | Classes partagées (DTOs, interfaces)         | Java Serialization            |
+| Composant        | Description                                 | Technologies             |
+| ---------------- | ------------------------------------------- | ------------------------ |
+| **Server**       | Serveur central d'enchères                  | TCP + Multicast + RMI    |
+| **Client Buyer** | Clients acheteurs (JavaFX UI et console)    | TCP + Multicast Listener |
+| **Client Admin** | Clients admin (JavaFX UI et console legacy) | RMI                      |
+| **Common**       | Classes partagées (DTOs, interfaces)        | Java Serialization       |
 
 ---
 
