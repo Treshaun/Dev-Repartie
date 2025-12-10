@@ -1,7 +1,13 @@
 # 🏛️ La Salle des Ventes Distribuée (e-Auction)
 
 > **Module :** Développement d'Applications Réparties / Systèmes Distribués  
-> **Type :** Examen Pratique / Projet de Fin de Semestre
+> **Type :** Examen Pratique / Projet de Fin de Semestre  
+> **Auteur :** Youssef  
+> **Date :** Décembre 2025
+
+[![Java](https://img.shields.io/badge/Java-11%2B-orange)](https://www.oracle.com/java/)
+[![Maven](https://img.shields.io/badge/Maven-3.6%2B-blue)](https://maven.apache.org/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-17.0.2-green)](https://openjfx.io/)
 
 ---
 
@@ -10,11 +16,12 @@
 1. [Description du Projet](#1-description-du-projet)
 2. [Architecture Technique](#2-architecture-technique)
 3. [Structure du Projet](#3-structure-du-projet)
-4. [Fonctionnalités Requises](#4-fonctionnalités-requises)
+4. [Fonctionnalités](#4-fonctionnalités)
 5. [Instructions d'Installation](#5-instructions-dinstallation)
-6. [Scénario d'Exécution](#6-scénario-dexécution)
-7. [Critères d'Évaluation](#7-critères-dévaluation)
-8. [Références TP](#8-références-tp)
+6. [Guide d'Utilisation](#6-guide-dutilisation)
+7. [Scénario d'Exécution](#7-scénario-dexécution)
+8. [Captures d'Écran](#8-captures-décran)
+9. [Technologies Utilisées](#9-technologies-utilisées)
 
 ---
 
@@ -107,18 +114,20 @@ e-auction/
 ├── client-buyer/                    # Module client acheteur
 │   ├── pom.xml
 │   └── src/main/java/com/auction/client/
-│       ├── BuyerClient.java         # Interface Swing
+│       ├── BuyerClientApp.java      # Interface JavaFX
+│       ├── BuyerClient.java         # Version Swing (legacy)
 │       └── MulticastListener.java   # Écoute Multicast
 │
 └── client-admin/                    # Module client admin
     ├── pom.xml
     └── src/main/java/com/auction/admin/
-        └── AdminClient.java         # Console RMI
+        ├── AdminClientApp.java      # Interface JavaFX
+        └── AdminClient.java         # Console RMI (legacy)
 ```
 
 ---
 
-## 4. Fonctionnalités Requises
+## 4. Fonctionnalités
 
 ### Serveur d'Enchères
 
@@ -128,21 +137,24 @@ e-auction/
 - ✅ Service RMI pour l'administration
 - ✅ Robustesse (gestion des déconnexions)
 
-### Client Acheteur
+### Client Acheteur (JavaFX)
 
-- ✅ Interface graphique Swing
+- ✅ Interface graphique moderne JavaFX
 - ✅ Connexion TCP avec authentification
-- ✅ Envoi d'enchères
+- ✅ Envoi d'enchères en temps réel
 - ✅ Réception temps-réel via Multicast
-- ✅ Affichage de l'historique
+- ✅ Affichage de l'historique des enchères
+- ✅ Liste des enchères actives
+- ✅ Panel de connexion intuitif
 
-### Client Administrateur
+### Client Administrateur (JavaFX + RMI)
 
-- ✅ Connexion RMI
+- ✅ Dashboard d'administration avec thème sombre
+- ✅ Connexion RMI sécurisée
 - ✅ Démarrer/Clôturer une enchère
 - ✅ Voir le statut en cours
-- ✅ Lister/Bannir des clients
-- ✅ Consulter l'historique des ventes
+- ✅ Lister/Bannir des clients connectés
+- ✅ Tableau d'historique des ventes
 
 ---
 
@@ -150,39 +162,67 @@ e-auction/
 
 ### Prérequis
 
-- **Java JDK 11** ou supérieur
+- **Java JDK 11** ou supérieur (testé avec Java 21)
 - **Maven 3.6** ou supérieur
+- **JavaFX 17.0.2** (inclus dans les dépendances Maven)
 
 ### Compilation
 
 ```bash
-# Depuis le répertoire e-auction/
-mvn clean install
+# Cloner le dépôt
+git clone https://github.com/youssef7511/Dev-Repartie.git
+cd Dev-Repartie
+
+# Compiler tous les modules
+mvn clean install -DskipTests
 ```
 
 ### Exécution
 
 **Étape 1 - Démarrer le Serveur :**
+
 ```bash
 cd server
-mvn exec:java
+mvn exec:java -Dexec.mainClass="com.auction.server.AuctionServer"
 ```
 
 **Étape 2 - Démarrer le Client Admin (nouveau terminal) :**
+
 ```bash
 cd client-admin
-mvn exec:java
+mvn exec:java -Dexec.mainClass="com.auction.admin.AdminClientApp"
 ```
 
 **Étape 3 - Démarrer les Clients Acheteurs (plusieurs terminaux) :**
+
 ```bash
 cd client-buyer
-mvn exec:java
+mvn exec:java -Dexec.mainClass="com.auction.client.BuyerClientApp"
 ```
+
+> **Note Windows :** Utilisez `"` autour des arguments `-Dexec.mainClass`
 
 ---
 
-## 6. Scénario d'Exécution
+## 6. Guide d'Utilisation
+
+### Client Acheteur
+
+1. **Connexion** : Entrez votre nom d'utilisateur et cliquez sur "Se Connecter"
+2. **Visualiser les enchères** : Les enchères actives s'affichent automatiquement
+3. **Enchérir** : Sélectionnez une enchère, entrez un montant supérieur au prix actuel
+4. **Suivre en temps réel** : Les mises à jour arrivent via Multicast
+
+### Client Administrateur
+
+1. **Connexion RMI** : Cliquez sur "Connecter" pour établir la connexion
+2. **Créer une enchère** : Renseignez le nom du produit et le prix de départ
+3. **Gérer les clients** : Visualisez et bannissez si nécessaire
+4. **Clôturer** : Terminez l'enchère pour désigner le gagnant
+
+---
+
+## 7. Scénario d'Exécution
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -225,49 +265,73 @@ mvn exec:java
 
 ---
 
-## 7. Critères d'Évaluation
+## 8. Captures d'Écran
 
-| Critère | Points | Description |
-|---------|--------|-------------|
-| **Robustesse** | /4 | Le serveur ne plante pas si un client se déconnecte |
-| **Exceptions** | /3 | Gestion correcte de `RemoteException`, `IOException` |
-| **Qualité du Code** | /3 | Classes partagées, modularité, commentaires |
-| **Concurrence** | /4 | Protection des données partagées (`synchronized`) |
-| **TCP** | /3 | Authentification et envoi d'enchères |
-| **Multicast** | /3 | Diffusion temps-réel fonctionnelle |
-| **RMI** | /3 | Administration distante opérationnelle |
-| **Interface** | /2 | Interface Swing fonctionnelle |
+### Interface Client Acheteur
 
-**Total : /25 points**
+- Panel de connexion avec saisie du nom d'utilisateur
+- Liste des enchères actives avec prix en temps réel
+- Historique des enchères placées
+- Formulaire d'enchère intuitif
 
----
+### Interface Administrateur
 
-## 8. Références TP
-
-| TP | Concepts | Application |
-|----|----------|-------------|
-| **TP2** | Sockets TCP/UDP, Sérialisation | Connexion client, objets `Message` |
-| **TP3** | Multithreading, Swing | Thread par client, interface graphique |
-| **TP4** | UDP Multicast | Diffusion des prix |
-| **TP5** | Synchronisation, Sémaphores | Protection du prix courant |
-| **TP6** | Java RMI | Interface d'administration |
+- Dashboard sombre moderne
+- Contrôle complet des enchères (démarrer/arrêter)
+- Liste des clients connectés avec options de bannissement
+- Tableau d'historique détaillé
 
 ---
 
-## 📝 Notes Importantes
+## 9. Technologies Utilisées
 
-> ⚠️ **Concurrence** : La variable `currentPrice` est protégée par un `ReentrantLock` pour éviter les conditions de course.
+| Technologie | Version | Usage |
+|-------------|---------|-------|
+| Java | 11+ | Langage principal |
+| JavaFX | 17.0.2 | Interface graphique moderne |
+| Maven | 3.6+ | Gestion des dépendances |
+| TCP Sockets | - | Communication client-serveur |
+| UDP Multicast | - | Diffusion temps réel |
+| Java RMI | - | Administration distante |
 
-> ⚠️ **Multicast** : L'adresse `225.1.1.1` est une adresse de groupe. Tous les clients rejoignent ce groupe automatiquement.
+---
 
-> ⚠️ **RMI** : Le registre RMI est créé automatiquement par le serveur sur le port `1099`.
+## 📝 Configuration Réseau
+
+| Paramètre | Valeur | Description |
+|-----------|--------|-------------|
+| TCP Port | `5000` | Port du serveur d'enchères |
+| Multicast Group | `225.1.1.1` | Adresse de diffusion |
+| Multicast Port | `6000` | Port multicast |
+| RMI Port | `1099` | Port du registre RMI |
+| RMI Service | `AuctionAdmin` | Nom du service RMI |
+
+---
+
+## 🔒 Notes Techniques
+
+> **Concurrence** : La variable `currentPrice` est protégée par un `ReentrantLock` pour éviter les conditions de course.
+
+> **Multicast** : L'adresse `225.1.1.1` est une adresse de groupe. Tous les clients rejoignent ce groupe automatiquement.
+
+> **RMI** : Le registre RMI est créé automatiquement par le serveur sur le port `1099`.
+
+> **JavaFX Warning** : Le warning "Unsupported JavaFX configuration" peut apparaître mais n'affecte pas le fonctionnement.
 
 ---
 
 ## 👨‍💻 Auteur
 
-Projet conçu pour le module de **Développement d'Applications Réparties**
+**Youssef** - Projet conçu pour le module de **Développement d'Applications Réparties**
+
+📧 GitHub: [@youssef7511](https://github.com/youssef7511)
 
 ---
 
-*Bonne chance ! 🎯*
+## 📄 Licence
+
+Ce projet est développé à des fins éducatives dans le cadre du cours de Développement d'Applications Réparties.
+
+---
+
+🎯 **Bonne utilisation !**
