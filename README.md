@@ -13,11 +13,18 @@
 
 ## 📋 Table des Matières
 
-1. [Description du Projet](#1-description-du-projet)
-2. [Architecture Technique](#2-architecture-technique)
-3. [Instructions d'Installation](#3-instructions-dinstallation)
-4. [Exécution](#4-exécution)
-5. [Configuration Réseau](#5-configuration-réseau)
+- [🏛️ La Salle des Ventes Distribuée (e-Auction)](#️-la-salle-des-ventes-distribuée-e-auction)
+  - [📋 Table des Matières](#-table-des-matières)
+  - [1. Description du Projet](#1-description-du-projet)
+  - [2. Architecture Technique](#2-architecture-technique)
+    - [Composants](#composants)
+  - [3. Instructions d'Installation](#3-instructions-dinstallation)
+    - [Prérequis](#prérequis)
+    - [Compilation](#compilation)
+  - [4. Exécution](#4-exécution)
+    - [Version console (legacy)](#version-console-legacy)
+    - [Version JavaFX (UI)](#version-javafx-ui)
+  - [5. Configuration Réseau](#5-configuration-réseau)
 
 ---
 
@@ -29,9 +36,9 @@ Système d'enchères électroniques en temps réel. Acheteurs multiples via TCP 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    ARCHITECTURE e-AUCTION                        │
+│                    ARCHITECTURE e-AUCTION                       │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
+│                                                                 │
 │   ┌──────────────┐         TCP/Socket          ┌─────────────┐  │
 │   │   Client     │◄───────────────────────────►│             │  │
 │   │  Acheteur A  │                             │             │  │
@@ -56,23 +63,25 @@ Système d'enchères électroniques en temps réel. Acheteurs multiples via TCP 
 
 ### Composants
 
-| Composant | Description | Technologies |
-|-----------|-------------|--------------|
-| **Server** | Serveur central d'enchères | TCP + Multicast + RMI |
-| **Client Buyer** | Interface graphique Swing pour enchérir | TCP + Multicast Listener |
-| **Client Admin** | Console d'administration | RMI |
-| **Common** | Classes partagées (DTOs, interfaces) | Java Serialization |
+| Composant        | Description                                  | Technologies                  |
+| ---------------- | -------------------------------------------- | ----------------------------- |
+| **Server**       | Serveur central d'enchères                   | TCP + Multicast + RMI         |
+| **Client Buyer** | Clients acheteurs (JavaFX UI et console)     | TCP + Multicast Listener      |
+| **Client Admin** | Clients admin (JavaFX UI et console legacy)  | RMI                           |
+| **Common**       | Classes partagées (DTOs, interfaces)         | Java Serialization            |
 
 ---
 
 ## 3. Instructions d'Installation
 
 ### Prérequis
+
 - Java JDK 11+
 - Maven 3.6+
 - JavaFX 17.0.2 (via dépendances Maven)
 
 ### Compilation
+
 ```powershell
 # Cloner le dépôt
 git clone https://github.com/Treshaun/Dev-Repartie.git
@@ -85,6 +94,7 @@ mvn -DskipTests clean install
 ## 4. Exécution
 
 ### Version console (legacy)
+
 ```powershell
 # Serveur
 Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\server; mvn exec:java ''-Dexec.mainClass=com.auction.server.AuctionServer'''
@@ -97,6 +107,7 @@ Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-buyer; 
 ```
 
 ### Version JavaFX (UI)
+
 ```powershell
 Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\server; mvn exec:java ''-Dexec.mainClass=com.auction.server.AuctionServer'''
 Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-admin; mvn exec:java ''-Dexec.mainClass=com.auction.admin.AdminClientApp'''
@@ -107,10 +118,10 @@ Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-buyer; 
 
 ## 5. Configuration Réseau
 
-| Paramètre | Valeur | Description |
-|-----------|--------|-------------|
-| TCP Port | `5000` | Port du serveur d'enchères |
-| Multicast Group | `225.1.1.1` | Adresse de diffusion |
-| Multicast Port | `6000` | Port multicast |
-| RMI Port | `1099` | Port du registre RMI |
-| RMI Service | `AuctionAdmin` | Nom du service RMI |
+| Paramètre       | Valeur         | Description                |
+| --------------- | -------------- | -------------------------- |
+| TCP Port        | `5000`         | Port du serveur d'enchères |
+| Multicast Group | `225.1.1.1`    | Adresse de diffusion       |
+| Multicast Port  | `6000`         | Port multicast             |
+| RMI Port        | `1099`         | Port du registre RMI       |
+| RMI Service     | `AuctionAdmin` | Nom du service RMI         |
