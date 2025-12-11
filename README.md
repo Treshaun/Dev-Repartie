@@ -72,19 +72,6 @@ mvn -DskipTests clean install
 
 ## 4. Exécution
 
-### Version console (legacy)
-
-```powershell
-# Serveur
-Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\server; mvn exec:java ''-Dexec.mainClass=com.auction.server.AuctionServer'''
-
-# Admin (console)
-Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-admin; mvn exec:java ''-Dexec.mainClass=com.auction.admin.AdminClient'''
-
-# Acheteur (console)
-Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-buyer; mvn exec:java ''-Dexec.mainClass=com.auction.client.BuyerClient'''
-```
-
 ### Version JavaFX (UI)
 
 ```powershell
@@ -104,4 +91,3 @@ Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-buyer; 
 | Multicast Port  | `6000`         | Port multicast             |
 | RMI Port        | `1099`         | Port du registre RMI       |
 | RMI Service     | `AuctionAdmin` | Nom du service RMI         |
-
