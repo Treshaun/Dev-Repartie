@@ -7,23 +7,6 @@
 
 ---
 
-## 📋 Table des Matières
-
-- [🏛️ La Salle des Ventes Distribuée (e-Auction)](#-la-salle-des-ventes-distribuée-e-auction)
-  - [📋 Table des Matières](#-table-des-matières)
-  - [1. Description du Projet](#1-description-du-projet)
-  - [2. Architecture Technique](#2-architecture-technique)
-    - [Composants](#composants)
-  - [3. Instructions d'Installation](#3-instructions-dinstallation)
-    - [Prérequis](#prérequis)
-    - [Compilation](#compilation)
-  - [4. Exécution](#4-exécution)
-    - [Version console (legacy)](#version-console-legacy)
-    - [Version JavaFX (UI)](#version-javafx-ui)
-  - [5. Configuration Réseau](#5-configuration-réseau)
-
----
-
 ## 1. Description du Projet
 
 Système d'enchères électroniques en temps réel. Acheteurs multiples via TCP + Multicast, administration distante via RMI, clients JavaFX et console (legacy).
