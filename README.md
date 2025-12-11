@@ -63,7 +63,7 @@ Système d'enchères électroniques en temps réel. Acheteurs multiples via TCP 
 
 ```powershell
 # Cloner le dépôt
-git clone https://github.com/Treshaun/Dev-Repartie.git
+git clone https://github.com/ranicharradi/Dev-Repartie.git
 Set-Location Dev-Repartie
 
 # Compiler tous les modules
@@ -104,3 +104,4 @@ Start-Process powershell -ArgumentList '-NoExit','-Command','cd .\client-buyer; 
 | Multicast Port  | `6000`         | Port multicast             |
 | RMI Port        | `1099`         | Port du registre RMI       |
 | RMI Service     | `AuctionAdmin` | Nom du service RMI         |
+
